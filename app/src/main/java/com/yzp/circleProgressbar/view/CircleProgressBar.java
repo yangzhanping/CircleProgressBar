@@ -139,6 +139,11 @@ public class CircleProgressBar extends View {
         canvas.drawArc(circleOval, startAngle, sweepAngle, false, mfgPaint);
     }
 
+    /**
+     * 设置进度
+     *
+     * @param progress
+     */
     public void setProgress(float progress) {
         this.currentProgress = currentProgress + progress;
         if (sweepAngle < maxAngle) {
@@ -147,6 +152,12 @@ public class CircleProgressBar extends View {
         }
     }
 
+    /**
+     * 设置进度并增加动画效果
+     *
+     * @param progress
+     * @param animTime
+     */
     public void setProgress(float progress, long animTime) {
         if (animTime <= 0) {
             setProgress(progress);
@@ -166,5 +177,35 @@ public class CircleProgressBar extends View {
             animator.setDuration(animTime);
             animator.start();
         }
+    }
+
+    /**
+     * 进度条开始颜色
+     *
+     * @param color
+     */
+    public void setProgressStartColor(int color) {
+        this.startColor = color;
+        invalidate();
+    }
+
+    /**
+     * 进度条结束颜色
+     *
+     * @param color
+     */
+    public void setProgressEndColor(int color) {
+        this.endColor = color;
+        invalidate();
+    }
+
+    /**
+     * 设置进度底图默认颜色
+     *
+     * @param color
+     */
+    public void setProgressDefaultColor(int color) {
+        this.circleBgColor = color;
+        invalidate();
     }
 }
