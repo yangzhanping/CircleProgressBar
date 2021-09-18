@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         btn_progress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rp_progress.setProgress(10);
+                rp_progress.setProgress(10, 1000);
             }
         });
     }
