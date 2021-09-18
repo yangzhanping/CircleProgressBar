@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.yzp.roundprogressbar"
+        applicationId "com.yzp.circleProgressbar"
         minSdk 21
         targetSdk 30
         versionCode 1

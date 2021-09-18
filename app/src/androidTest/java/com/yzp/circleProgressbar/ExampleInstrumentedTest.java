@@ -1,4 +1,4 @@
-package com.yzp.roundprogressbar;
+package com.yzp.circleProgressbar;
 
 import android.content.Context;
 

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="增加进度" />
 
-    <com.yzp.roundprogressbar.view.RoundProgressBar
+    <com.yzp.circleProgressbar.view.CircleProgressBar
         android:id="@+id/rp_progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

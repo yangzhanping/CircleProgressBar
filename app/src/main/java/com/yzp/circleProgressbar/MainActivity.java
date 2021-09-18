@@ -1,17 +1,16 @@
-package com.yzp.roundprogressbar;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.yzp.circleProgressbar;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 
-import com.yzp.roundprogressbar.view.RoundProgressBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.yzp.circleProgressbar.view.CircleProgressBar;
 
 public class MainActivity extends AppCompatActivity {
 
-    RoundProgressBar rp_progress;
+    CircleProgressBar rp_progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

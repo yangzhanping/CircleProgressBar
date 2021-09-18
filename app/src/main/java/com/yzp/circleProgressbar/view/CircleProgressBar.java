@@ -1,4 +1,4 @@
-package com.yzp.roundprogressbar.view;
+package com.yzp.circleProgressbar.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -12,9 +12,9 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.yzp.roundprogressbar.R;
+import com.yzp.circleProgressbar.R;
 
-public class RoundProgressBar extends View {
+public class CircleProgressBar extends View {
     private Paint mbgPaint = null;
     private Paint mfgPaint = null;
     private Paint mPaint = null;
@@ -43,15 +43,15 @@ public class RoundProgressBar extends View {
     private float sweepAngle = 0;
 
 
-    public RoundProgressBar(Context context) {
+    public CircleProgressBar(Context context) {
         this(context, null);
     }
 
-    public RoundProgressBar(Context context, @Nullable AttributeSet attrs) {
+    public CircleProgressBar(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public RoundProgressBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CircleProgressBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initAttribute();
     }
