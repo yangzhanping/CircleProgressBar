@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircularProgressView">
+        <!--全局参数-->
+        <attr name="ringWidth" format="integer" />      <!--扇形宽度-->
+        <attr name="startAngle" format="float" />       <!--扇形开始角度-->
+        <attr name="endAngle" format="float" />         <!--扇形结束角度-->
+        <attr name="progress" format="float" />         <!--当前进度值-->
+        <attr name="maxProgress" format="float" />      <!--最大进度值-->
+
+        <!--最底层背景-->
+        <attr name="mBgColor" format="color" />     <!--背景颜色-->
+        <attr name="bgMargin" format="integer" />        <!--背景环宽度-->
+
+        <!--背景扇形-->
+        <attr name="mbgCircleColor" format="color" />    <!--背景扇形颜色-->
+
+        <!--进度扇形-->
+        <attr name="startColor" format="color" />       <!--进度圆环开始颜色-->
+        <attr name="endColor" format="color" />         <!--进度圆环结束颜色-->
+    </declare-styleable>
+</resources>

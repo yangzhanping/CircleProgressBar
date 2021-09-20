@@ -3,17 +3,15 @@ package com.yzp.circleProgressbar.view;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.SweepGradient;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 
 import androidx.annotation.Nullable;
 
@@ -24,26 +22,23 @@ public class CircleProgressBar extends View {
     private static final int DEFAULT_VIEW_WIDTH = 300;
 
     /*全局参数-----------------*/
-    private int circleWidth = 50;
-    private float centerXY;
-    private float radius;
+    private int ringWidth = 50;
     private RectF circleOval = null;
-    private float maxAngle = 260;
     private float startAngle = 140;
+    private float endAngle = 260;
     private float maxProgress = 100;
-    private float currentProgress = 10;
+    private float currentProgress = 0;
     private float sweepAngle = 0;
 
-    /*白色圆形*/
-    private Paint mbgCirclePaint = null;
+    /*最底层背景*/
+    private Paint mbgPaint = null;
     private int mBgColor = getResources().getColor(R.color.white);
-    private int mbgCircleWidth = 20;
-    private float bgMargin = 20;
+    private int bgMargin = 20;
 
     /*背景扇形参数--------------*/
-    private Paint mbgPaint = null;
-    private int circleBgColor = getResources().getColor(R.color.circleBgColor);
-    private float rectStartXY = circleWidth + bgMargin;
+    private Paint mbgCirclePaint = null;
+    private int mbgCircleColor = getResources().getColor(R.color.bgCircleColor);
+    private int rectStartXY = ringWidth + bgMargin;
 
     /*进度条扇形参数------------*/
     private Paint mfgPaint = null;
@@ -61,35 +56,55 @@ public class CircleProgressBar extends View {
 
     public CircleProgressBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CircularProgressView);
+        //全局参数
+        ringWidth = typedArray.getInteger(R.styleable.CircularProgressView_ringWidth, 50);
+        startAngle = typedArray.getFloat(R.styleable.CircularProgressView_startAngle, 140);
+        endAngle = typedArray.getFloat(R.styleable.CircularProgressView_endAngle, 260);
+        currentProgress = typedArray.getFloat(R.styleable.CircularProgressView_progress, 0);
+        maxProgress = typedArray.getFloat(R.styleable.CircularProgressView_maxProgress, 100);
+
+        //最底层背景
+        mBgColor = typedArray.getInteger(R.styleable.CircularProgressView_mBgColor, getResources().getColor(R.color.white));
+        bgMargin = typedArray.getInteger(R.styleable.CircularProgressView_bgMargin, 20);
+
+        //背景扇形
+        mbgCircleColor = typedArray.getInteger(R.styleable.CircularProgressView_mbgCircleColor, getResources().getColor(R.color.bgCircleColor));
+
+        //进度扇形
+        startColor = typedArray.getColor(R.styleable.CircularProgressView_startColor, getResources().getColor(R.color.startColor));
+        endColor = typedArray.getColor(R.styleable.CircularProgressView_endColor, getResources().getColor(R.color.endColor));
+        typedArray.recycle();
+
         initAttribute();
     }
 
     private void initAttribute() {
         //背景扇形画笔设置
-        mbgCirclePaint = new Paint();
-        mbgCirclePaint.setColor(mBgColor);
-        mbgCirclePaint.setStyle(Paint.Style.FILL);
-        mbgCirclePaint.setAntiAlias(true);
-        mbgCirclePaint.setDither(true);
-
-        //背景扇形画笔设置
         mbgPaint = new Paint();
-        mbgPaint.setColor(circleBgColor);
-        mbgPaint.setStyle(Paint.Style.STROKE);
-        mbgPaint.setStrokeCap(Paint.Cap.ROUND);
-        mbgPaint.setStrokeWidth(circleWidth);
+        mbgPaint.setColor(mBgColor);
+        mbgPaint.setStyle(Paint.Style.FILL);
         mbgPaint.setAntiAlias(true);
         mbgPaint.setDither(true);
+
+        //背景扇形画笔设置
+        mbgCirclePaint = new Paint();
+        mbgCirclePaint.setColor(mbgCircleColor);
+        mbgCirclePaint.setStyle(Paint.Style.STROKE);
+        mbgCirclePaint.setStrokeCap(Paint.Cap.ROUND);
+        mbgCirclePaint.setStrokeWidth(ringWidth);
+        mbgCirclePaint.setAntiAlias(true);
+        mbgCirclePaint.setDither(true);
 
         //进度条扇形画笔参数设置
         mfgPaint = new Paint();
         mfgPaint.setColor(startColor);
         mfgPaint.setStyle(Paint.Style.STROKE);
         mfgPaint.setStrokeCap(Paint.Cap.ROUND);
-        mfgPaint.setStrokeWidth(circleWidth);
+        mfgPaint.setStrokeWidth(ringWidth);
         mfgPaint.setAntiAlias(true);
         mfgPaint.setDither(true);
-        sweepAngle = maxAngle * currentProgress / maxProgress;
+        sweepAngle = endAngle * currentProgress / maxProgress;
     }
 
     @Override
@@ -120,15 +135,15 @@ public class CircleProgressBar extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        centerXY = getWidth();
-        radius = centerXY / 2;
+        float centerXY = getWidth();
+        float radius = centerXY / 2;
 
         //底部白色圆形
-        canvas.drawCircle(radius, radius, radius, mbgCirclePaint);
+        canvas.drawCircle(radius, radius, radius, mbgPaint);
 
         //底部背景扇形
         circleOval = new RectF(rectStartXY, rectStartXY, centerXY - rectStartXY, centerXY - rectStartXY);
-        canvas.drawArc(circleOval, startAngle, maxAngle, false, mbgPaint);
+        canvas.drawArc(circleOval, startAngle, endAngle, false, mbgCirclePaint);
 
         //进度扇形
         float progressX = (float) (radius + (radius - rectStartXY) * Math.cos((sweepAngle + startAngle) * Math.PI / 180));
@@ -146,8 +161,8 @@ public class CircleProgressBar extends View {
      */
     public void setProgress(float progress) {
         this.currentProgress = currentProgress + progress;
-        if (sweepAngle < maxAngle) {
-            sweepAngle = maxAngle * currentProgress / maxProgress;
+        if (sweepAngle < endAngle) {
+            sweepAngle = endAngle * currentProgress / maxProgress;
             invalidate();
         }
     }
@@ -167,8 +182,8 @@ public class CircleProgressBar extends View {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
                     currentProgress = (Float) animation.getAnimatedValue();
-                    if (sweepAngle < maxAngle) {
-                        sweepAngle = maxAngle * currentProgress / maxProgress;
+                    if (sweepAngle < endAngle) {
+                        sweepAngle = endAngle * currentProgress / maxProgress;
                         invalidate();
                     }
                 }
@@ -177,35 +192,5 @@ public class CircleProgressBar extends View {
             animator.setDuration(animTime);
             animator.start();
         }
-    }
-
-    /**
-     * 进度条开始颜色
-     *
-     * @param color
-     */
-    public void setProgressStartColor(int color) {
-        this.startColor = color;
-        invalidate();
-    }
-
-    /**
-     * 进度条结束颜色
-     *
-     * @param color
-     */
-    public void setProgressEndColor(int color) {
-        this.endColor = color;
-        invalidate();
-    }
-
-    /**
-     * 设置进度底图默认颜色
-     *
-     * @param color
-     */
-    public void setProgressDefaultColor(int color) {
-        this.circleBgColor = color;
-        invalidate();
     }
 }
